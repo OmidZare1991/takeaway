@@ -24,6 +24,17 @@ Before you get started, make sure you have the following installed on your machi
 
 # Installation
 
+**Prepare Required Files**
+
+
+        In the root directory of your project, ensure you have the necessary files ready:
+    
+
+        The JAR file of your project (generated after running mvn clean compile) located in the target directory.
+
+
+        If needed, include application.properties and application-dev.properties files next to your Dockerfile.
+
 To run this project on your local machine, follow these steps:
 
 1. Clone the GitHub repository to your local machine:
