@@ -1,0 +1,49 @@
+package employee.service.management.query.handlers.impl;
+
+
+import employee.service.management.core.domain.Employee;
+import employee.service.management.core.events.EmployeeCreatedEvent;
+import employee.service.management.core.events.EmployeeDeletedEvent;
+import employee.service.management.core.events.EmployeeTerminateEvent;
+import employee.service.management.core.events.EmployeeUpdatedEvent;
+import employee.service.management.query.handlers.EmployeeEventHandler;
+import employee.service.management.query.mapper.EmployeeEventHandlerMapper;
+import employee.service.management.query.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
+import org.axonframework.config.ProcessingGroup;
+import org.axonframework.eventhandling.EventHandler;
+import org.springframework.stereotype.Service;
+
+@Service
+@ProcessingGroup("employee-group")
+@RequiredArgsConstructor
+public class EmployeeEventHandlerImpl implements EmployeeEventHandler {
+    private final EmployeeService employeeService;
+    private final EmployeeEventHandlerMapper mapper;
+
+    @Override
+    @EventHandler
+    public void on(EmployeeCreatedEvent event) {
+        employeeService.save(mapper.toEmployee(event));
+    }
+
+    @Override
+    @EventHandler
+    public void on(EmployeeUpdatedEvent event) {
+        Employee employee = employeeService.getEmployeeById(event.uuid());
+        employeeService.save(mapper.toEmployee(event,employee));
+    }
+
+    @Override
+    @EventHandler
+    public void on(EmployeeDeletedEvent event) {
+        employeeService.deleteById(event.uuid());
+    }
+
+
+    @Override
+    @EventHandler
+    public void on(EmployeeTerminateEvent event) {
+        employeeService.deleteById(event.uuid());
+    }
+}

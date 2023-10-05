@@ -1,0 +1,383 @@
+#version: '3.3'
+#services:
+#  db:
+#    image: mysql:5.7
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: 'db'
+#      MYSQL_USER: 'user'
+#      MYSQL_PASSWORD: 'password'
+#      MYSQL_ROOT_PASSWORD: 'password'
+#    ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#volumes:
+#  my-db:
+
+#version: '3.3'
+#services:
+#  db:
+#    image: mysql:5.7
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: 'db'
+#      MYSQL_USER: 'user'
+#      MYSQL_PASSWORD: 'password'
+#      MYSQL_ROOT_PASSWORD: 'password'
+#    ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#
+#  mongodb:
+#    image: mongo
+#    restart: always
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - mongodb-data:/data/db
+#volumes:
+#  my-db:
+#  mongodb-data:
+
+#version: '3.3'
+#services:
+#  db:
+#    image: mysql:5.7
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: 'db'
+#      MYSQL_USER: 'user'
+#      MYSQL_PASSWORD: 'password'
+#      MYSQL_ROOT_PASSWORD: 'password'
+#    ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#  mongodb:
+#    image: mongo
+#    restart: always
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - mongodb-data:/data/db
+#
+#  axonserver:
+#    image: axoniq/axonserver:latest
+#    environment:
+#      - AXONIQ_AXONSERVER_NAME=MyAxonServer
+#      - AXONIQ_AXONSERVER_HOSTNAME=localhost
+#      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+#    hostname: axonserver
+#    volumes:
+#      - axonserver-data:/data
+#      - axonserver-events:/eventdata
+#      - axonserver-config:/config:ro
+#    ports:
+#      - '8024:8024'
+#      - '8124:8124'
+#      - '8224:8224'
+#
+#volumes:
+#  my-db:
+#  mongodb-data:
+#  axonserver-data:
+#    driver: local
+#  axonserver-events:
+#    driver: local
+#  axonserver-config:
+#    driver: local
+
+
+
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-data:/data/db
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - '22181:2181'
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - '29092:29092'
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+volumes:
+  my-db:
+  mongodb-data:
+  axonserver-data:
+    driver: local
+  axonserver-events:
+    driver: local
+  axonserver-config:
+    driver: local
+
+
+
+#version: '3.3'
+#services:
+#  db:
+#    image: mysql:5.7
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: 'db'
+#      MYSQL_USER: 'user'
+#      MYSQL_PASSWORD: 'password'
+#      MYSQL_ROOT_PASSWORD: 'password'
+#    ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#  mongodb:
+#    image: mongo
+#    restart: always
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - mongodb-data:/data/db
+##  axonserver:
+##    image: axoniq/axonserver:latest
+##    environment:
+##      - AXONIQ_AXONSERVER_NAME=MyAxonServer
+##      - AXONIQ_AXONSERVER_HOSTNAME=localhost
+##      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+##    hostname: axonserver
+##    volumes:
+##      - axonserver-data:/data
+##      - axonserver-events:/eventdata
+##      - axonserver-config:/config:ro
+##    ports:
+##      - '8024:8024'
+##      - '8124:8124'
+##      - '8224:8224'
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - '22181:2181'
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - '9092:9092'
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#  redis:
+#    image: redis:latest
+#    restart: always
+#    ports:
+#      - '6379:6379'
+#
+#volumes:
+#  my-db:
+#  mongodb-data:
+#  axonserver-data:
+#    driver: local
+#  axonserver-events:
+#    driver: local
+#  axonserver-config:
+#    driver: local
+
+
+
+#version: '3.3'
+#services:
+#  db:
+#    image: mysql:5.7
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: 'db'
+#      MYSQL_USER: 'user'
+#      MYSQL_PASSWORD: 'password'
+#      MYSQL_ROOT_PASSWORD: 'password'
+#    ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#  mongodb:
+#    image: mongo
+#    restart: always
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - mongodb-data:/data/db
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - '22181:2181'
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - '9092:9092'
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#  redis:
+#    image: redis:latest
+#    restart: always
+#    ports:
+#      - '6379:6379'
+#  axonserver:
+#    image: axoniq/axonserver:latest
+#    container_name: axonserver
+#    ports:
+#      - '8024:8024'
+#      - '8124:8124'
+#      - '8224:8224'
+#    volumes:
+#      - axonserver-data:/axonserver/data
+#      - axonserver-config:/axonserver/config
+#    environment:
+#      - AXONIQ_AXONSERVER_NAME=MyAxonServer
+#      - AXONIQ_AXONSERVER_HOSTNAME=localhost
+#      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+
+#volumes:
+#  my-db:
+#  mongodb-data:
+#  axonserver-data:
+#    driver: local
+#  axonserver-config:
+#    driver: local
+
+
+
+#version: '3.3'
+#services:
+#  axonserver:
+#    image: axoniq/axonserver:latest
+#    container_name: axonserver
+#    ports:
+#      - '8024:8024'
+#      - '8124:8124'
+#      - '8224:8224'
+#    volumes:
+#      - axonserver-data:/axonserver/data
+#      - axonserver-config:/axonserver/config
+#    environment:
+#      - AXONIQ_AXONSERVER_NAME=MyAxonServer
+#      - AXONIQ_AXONSERVER_HOSTNAME=localhost
+#      - AXONIQ_AXONSERVER_DEVMODE_ENABLED=true
+#  db:
+#    image: mysql:5.7
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: 'db'
+#      MYSQL_USER: 'user'
+#      MYSQL_PASSWORD: 'password'
+#      MYSQL_ROOT_PASSWORD: 'password'
+#    ports:
+#      - '3306:3306'
+#    expose:
+#      - '3306'
+#    volumes:
+#      - my-db:/var/lib/mysql
+#
+#  mongodb:
+#    image: mongo
+#    restart: always
+#    ports:
+#      - '27017:27017'
+#    volumes:
+#      - mongodb-data:/data/db
+#
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    environment:
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - '22181:2181'
+#
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+##    depends_on:
+##      - axonserver
+#    ports:
+#      - '9092:9092'
+#    environment:
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#
+#  redis:
+#    image: redis:latest
+#    restart: always
+#    ports:
+#      - '6379:6379'
+#
+#volumes:
+#  my-db:
+#  mongodb-data:
+#  axonserver-data:
+#    driver: local
+#  axonserver-config:
+#    driver: local
