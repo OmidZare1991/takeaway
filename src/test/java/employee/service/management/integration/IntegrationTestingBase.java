@@ -26,8 +26,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-@Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@Testcontainers
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTestingBase {
 
     @Autowired
@@ -36,29 +36,28 @@ public class IntegrationTestingBase {
     int randomServerPort;
     String token;
 
-    @Container
-//    @ServiceConnection
+//    @Container
     static AxonServerContainer axonServerContainer = new AxonServerContainer(DockerImageName.parse("axoniq/axonserver:latest-dev"));
 
 
-    @Container
-    @ServiceConnection
+//    @Container
+//    @ServiceConnection
     static KafkaContainer kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:latest")).withExposedPorts(9092, 9092).withExposedPorts(9093, 9093)// Expose the Kafka port
             .withEnv("KAFKA_ADVERTISED_LISTENERS", "PLAINTEXT://localhost:9092") // Configure advertised listeners
             .withEnv("KAFKA_LISTENERS", "PLAINTEXT://0.0.0.0:9092"); // Configure listeners
 
 
-    @Container
-    @ServiceConnection
+//    @Container
+//    @ServiceConnection
     static MySQLContainer mySQLContainer = new MySQLContainer<>(DockerImageName.parse("mysql:latest"));
 
 
-    @Container
-    @ServiceConnection
+//    @Container
+//    @ServiceConnection
     static MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:latest"));
 
-    @Container
-    @ServiceConnection
+//    @Container
+//    @ServiceConnection
     private static final RedisContainer redisContainer = new RedisContainer(DockerImageName.parse("redis:latest")).withExposedPorts(6379);
 
     @BeforeEach
