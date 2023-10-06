@@ -31,8 +31,8 @@ public class CreateEmployeeController extends BaseController {
     @Operation(summary = "New Employee Creation", description = "Create a new Employee")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created", content =
-                    { @Content(mediaType = "application/json", schema =
-                    @Schema(implementation = ResponseDto.class)) }),
+                    {@Content(mediaType = "application/json", schema =
+                    @Schema(implementation = ResponseDto.class))}),
             @ApiResponse(responseCode = "422", description = "id cannot be null or empty"),
             @ApiResponse(responseCode = "400", description = "must be a well-formed email address"),
             @ApiResponse(responseCode = "400", description = "full name cannot be null or empty"),
@@ -40,10 +40,10 @@ public class CreateEmployeeController extends BaseController {
             @ApiResponse(responseCode = "403", description = "User not found"),
             @ApiResponse(responseCode = "417", description = "check your input and try again"),
             @ApiResponse(responseCode = "500", description = "Internal server error", content =
-                    { @Content(mediaType = "application/json", schema =
-                    @Schema(implementation = Problem.class)) }) })
-    public ResponseEntity<?> createEmployee(@RequestBody @Valid EmployeeRequest request){
+                    {@Content(mediaType = "application/json", schema =
+                    @Schema(implementation = Problem.class))})})
+    public ResponseEntity<?> createEmployee(@RequestBody @Valid EmployeeRequest request) {
         commandGateway.sendAndWait(mapper.toCreateEmployeeCommand(request));
-        return new ResponseEntity<>(new ResponseDto<>("creating new employee done successfully"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseDto<>("creating new employee with id: %s done successfully"), HttpStatus.CREATED);
     }
 }

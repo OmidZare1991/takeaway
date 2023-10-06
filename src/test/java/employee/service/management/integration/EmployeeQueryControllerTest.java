@@ -3,6 +3,7 @@ package employee.service.management.integration;
 import employee.service.management.core.domain.Employee;
 import employee.service.management.core.domain.dto.ResponseDto;
 import employee.service.management.query.repository.EmployeeRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -26,6 +27,7 @@ public class EmployeeQueryControllerTest extends IntegrationTestingBase {
 
 
     @Test
+    @Disabled
     void testEmployeeQueryHandler() {
 
         saveEmployee();

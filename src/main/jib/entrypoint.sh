@@ -1,7 +1,12 @@
 #!/bin/sh
 
-echo "The application will start in ${DOCKER_INIT_SLEEP}s..." && sleep ${DOCKER_INIT_SLEEP}
-exec java ${JAVA_OPTS} -noverify -XX:+AlwaysPreTouch -Djava.security.egd=file:/dev/./urandom -cp /app/resources/:/app/classes/:/app/libs/*:. ${MAIN_CLASS_PATH}  "$@"
+echo "The application will start in now"
+exec java -noverify -cp /app/resources/:/app/classes/:/app/libs/*:. ${MAIN_CLASS_PATH}  "$@"
+
+
+
+
+
 
 
 

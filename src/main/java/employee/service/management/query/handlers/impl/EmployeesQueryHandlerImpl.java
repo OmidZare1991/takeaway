@@ -1,14 +1,16 @@
 package employee.service.management.query.handlers.impl;
 
+import employee.service.management.core.domain.Employee;
 import employee.service.management.query.dto.EmployeeResponseDto;
 import employee.service.management.query.dto.FindEmployeeQuery;
 import employee.service.management.query.dto.FindEmployeesQuery;
 import employee.service.management.query.dto.QueryEmployeesResponseDto;
 import employee.service.management.query.handlers.EmployeesQueryHandler;
+import employee.service.management.query.mapper.EmployeesQueryHandlerMapper;
 import employee.service.management.query.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.axonframework.queryhandling.QueryHandler;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EmployeesQueryHandlerImpl implements EmployeesQueryHandler {
     private final EmployeeService employeeService;
+    private final EmployeesQueryHandlerMapper queryHandlerMapper;
 
     @Override
     @QueryHandler
@@ -26,8 +29,8 @@ public class EmployeesQueryHandlerImpl implements EmployeesQueryHandler {
 
     @Override
     @QueryHandler
-    @Cacheable(value = "employee", key = "#query.id()")
     public EmployeeResponseDto findEmployeeById(FindEmployeeQuery query) {
-        return employeeService.findById(query.id());
+        Employee employee = employeeService.findById(query.id()).orElseThrow(() -> new ResourceNotFoundException("employee not found"));
+        return queryHandlerMapper.toEmployeeResponseDto(employee);
     }
 }

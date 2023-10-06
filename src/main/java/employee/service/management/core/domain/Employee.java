@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
+@ToString
 @EqualsAndHashCode(exclude = "hobbies")
 public class Employee implements Serializable {
     @Id
@@ -22,5 +24,6 @@ public class Employee implements Serializable {
 
     @CollectionTable(name = "hobbies", joinColumns = @JoinColumn(name = "employee_id"))
     @ElementCollection
+    @ToString.Exclude
     private List<String> hobbies = new ArrayList<>();
 }

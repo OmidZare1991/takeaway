@@ -38,7 +38,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://192.168.0.7:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -47,6 +47,26 @@ services:
     restart: always
     ports:
       - '6379:6379'
+
+
+  employee:
+    image: takeaway/employee-service-management:latest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://192.168.0.7:3306/db
+      SPRING_DATA_MONGODB_HOST: 192.168.0.7
+      AXON_KAFKA_BOOTSTRAP-SERVERS: 192.168.0.7:29092
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS: 192.168.0.7:29092
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS: 192.168.0.7:29092
+      SPRING_DATA_REDIS_HOST: 192.168.0.7
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - db
+      - mongodb
+      - zookeeper
+      - kafka
+      - redis
+    ports:
+      - '8080:8080'
 volumes:
   my-db:
   mongodb-data:
