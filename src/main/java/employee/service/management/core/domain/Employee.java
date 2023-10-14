@@ -5,9 +5,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -21,6 +23,8 @@ public class Employee implements Serializable {
     private String email;
     private String fullName;
     private String birthdate;
+    @CreationTimestamp
+    private Date createdAt;
 
     @CollectionTable(name = "hobbies", joinColumns = @JoinColumn(name = "employee_id"))
     @ElementCollection

@@ -1,7 +1,6 @@
 package employee.service.management.query.service;
 
 import employee.service.management.core.domain.Employee;
-import employee.service.management.query.dto.EmployeeResponseDto;
 import employee.service.management.query.dto.QueryEmployeesResponseDto;
 import org.springframework.data.domain.PageRequest;
 
@@ -14,6 +13,8 @@ public interface EmployeeService {
     Optional<Employee> findById(String id);
 
     QueryEmployeesResponseDto findAll(PageRequest page);
+    QueryEmployeesResponseDto findEmployeesWithPagination(PageRequest page);
 
     void deleteById(String id);
+
 }

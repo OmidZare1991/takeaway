@@ -14,9 +14,11 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.axonframework.commandhandling.CommandHandler;
+import org.axonframework.eventhandling.SequenceNumber;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
+import org.axonframework.modelling.command.AggregateVersion;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.mapstruct.factory.Mappers;
 
@@ -28,10 +30,13 @@ import java.util.List;
 public class EmployeeAggregate {
     @AggregateIdentifier
     private String uuid;
+    @AggregateVersion
+    private long version;
     private String email;
     private String fullName;
     private String birthdate;
     private List<String> hobbies;
+
     EmployeeAggregateMapper mapper = Mappers.getMapper(EmployeeAggregateMapper.class);
 
     @CommandHandler
@@ -40,26 +45,28 @@ public class EmployeeAggregate {
     }
 
     @EventSourcingHandler
-    public void on(EmployeeCreatedEvent event) {
+    public void on(EmployeeCreatedEvent event,@SequenceNumber long version) {
         this.uuid = event.uuid();
         this.email = event.email();
         this.fullName = event.fullName();
         this.birthdate = event.birthdate();
         this.hobbies = event.hobbies();
+        this.version= version;
     }
 
     @CommandHandler
     public void handle(UpdateEmployeeCommand command) {
-        AggregateLifecycle.apply(mapper.toEmployeeUpdatedEvent(command));
+            AggregateLifecycle.apply(mapper.toEmployeeUpdatedEvent(command));
     }
 
     @EventSourcingHandler
-    public void on(EmployeeUpdatedEvent event) {
+    public void on(EmployeeUpdatedEvent event, @SequenceNumber long version) {
         this.uuid = event.uuid();
         this.email = event.email();
         this.fullName = event.fullName();
         this.birthdate = event.birthdate();
         this.hobbies = event.hobbies();
+        this.version = version;
     }
 
     @CommandHandler
@@ -75,7 +82,6 @@ public class EmployeeAggregate {
     public void on(EmployeeDeletedEvent event) {
         AggregateLifecycle.markDeleted();
     }
-
 
     @CommandHandler
     public void handle(TerminateEmployeeCommand command) {

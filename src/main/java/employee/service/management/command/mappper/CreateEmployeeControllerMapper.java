@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 public interface CreateEmployeeControllerMapper extends BaseMapper {
     @Mapping(target = "birthdate", qualifiedByName = "toDate", source = "birthdate")
     @Mapping(target = "uuid", expression = "java(getId())")
+//    @Mapping(target = "version", ignore = true)
     CreateEmployeeCommand toCreateEmployeeCommand(EmployeeRequest request);
 }

@@ -27,13 +27,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Cacheable(value = "employeeById", key = "#id")
+    @Cacheable(value = "cacheById",key = "#id")
     public Optional<Employee> findById(String id) {
         return employeeRepository.findById(id);
     }
 
     @Override
-    @Cacheable(value = "employees", key = "#page.pageNumber")
+    @Cacheable(cacheNames = "employees", key = "#page.pageNumber")
     public QueryEmployeesResponseDto findAll(PageRequest page) {
         Page<Employee> employees = employeeRepository.findAll(page);
 
@@ -45,6 +45,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                 , employees.getNumber()
                 , employees.getSize()
         );
+    }
+
+    @Override
+    public QueryEmployeesResponseDto findEmployeesWithPagination(PageRequest page) {
+//        Page<Employee> employees = employeeRepository.findEmployeesWithPagination(page.getPageSize(),page.getOffset());
+//        return new QueryEmployeesResponseDto(
+//                queryHandlerMapper.toEmployeeResponseDtos(
+//                        employees.getContent())
+//                , employees.getTotalElements()
+//                , employees.getTotalPages()
+//                , employees.getNumber()
+//                , employees.getSize()
+//        );
+        return null;
     }
 
     @Override

@@ -18,13 +18,20 @@ public class AxonConfig {
 
     @Bean
     public EmbeddedEventStore eventStore(EventStorageEngine storageEngine, SpringAxonConfiguration configuration) {
-        return EmbeddedEventStore.builder().storageEngine(storageEngine).messageMonitor(configuration.getObject().messageMonitor(EventStore.class, "employeeStore")).build();
+        return EmbeddedEventStore.builder()
+                .storageEngine(storageEngine)
+                .messageMonitor(configuration.getObject().messageMonitor(EventStore.class, "employeeStore"))
+                .build();
 
     }
 
     @Bean
     public EventStorageEngine storageEngine(MongoClient client) {
-        return MongoEventStorageEngine.builder().mongoTemplate(DefaultMongoTemplate.builder().mongoDatabase(client).build()).eventSerializer(JacksonSerializer.defaultSerializer()).snapshotSerializer(JacksonSerializer.defaultSerializer()).build();
+        return MongoEventStorageEngine.builder()
+                .mongoTemplate(DefaultMongoTemplate.builder().mongoDatabase(client).build())
+                .eventSerializer(JacksonSerializer.defaultSerializer())
+                .snapshotSerializer(JacksonSerializer.defaultSerializer())
+                .build();
     }
 
     @Autowired

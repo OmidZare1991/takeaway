@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 public interface UpdateEmployeeControllerMapper extends BaseMapper {
     @Mapping(target = "birthdate", qualifiedByName = "toDate", source = "request.birthdate")
     @Mapping(target = "uuid", source = "id")
+//    @Mapping(target = "version", ignore = true)
     UpdateEmployeeCommand toUpdateEmployeeCommand(EmployeeRequest request,String id);
 }
