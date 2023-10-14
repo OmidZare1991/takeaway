@@ -48,20 +48,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public QueryEmployeesResponseDto findEmployeesWithPagination(PageRequest page) {
-//        Page<Employee> employees = employeeRepository.findEmployeesWithPagination(page.getPageSize(),page.getOffset());
-//        return new QueryEmployeesResponseDto(
-//                queryHandlerMapper.toEmployeeResponseDtos(
-//                        employees.getContent())
-//                , employees.getTotalElements()
-//                , employees.getTotalPages()
-//                , employees.getNumber()
-//                , employees.getSize()
-//        );
-        return null;
-    }
-
-    @Override
     public void deleteById(String id) {
         employeeRepository.deleteById(id);
     }

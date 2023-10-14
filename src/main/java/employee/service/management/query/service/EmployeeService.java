@@ -13,8 +13,6 @@ public interface EmployeeService {
     Optional<Employee> findById(String id);
 
     QueryEmployeesResponseDto findAll(PageRequest page);
-    QueryEmployeesResponseDto findEmployeesWithPagination(PageRequest page);
-
     void deleteById(String id);
 
 }

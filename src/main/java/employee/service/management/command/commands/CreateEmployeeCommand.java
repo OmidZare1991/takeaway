@@ -7,7 +7,6 @@ import java.util.List;
 
 public record CreateEmployeeCommand(
         @TargetAggregateIdentifier String uuid
-//        ,@TargetAggregateVersion long version
         , String email
         , String fullName
         ,String birthdate

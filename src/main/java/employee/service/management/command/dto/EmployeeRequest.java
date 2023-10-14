@@ -7,5 +7,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record EmployeeRequest(@Email String email, @NotBlank(message = "full name cannot be null or empty") String fullName, @NotNull(message = "birthdate cannot be null or empty") Long birthdate, List<String> hobbies) {
+public record EmployeeRequest(
+        @Email String email
+        , @NotBlank(message = "full name cannot be null or empty") String fullName
+        , @NotNull(message = "birthdate cannot be null or empty") Long birthdate
+        , List<String> hobbies
+) {
 }
