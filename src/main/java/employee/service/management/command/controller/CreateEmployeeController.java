@@ -43,7 +43,7 @@ public class CreateEmployeeController extends BaseController {
                     {@Content(mediaType = "application/json", schema =
                     @Schema(implementation = Problem.class))})})
     public ResponseEntity<?> createEmployee(@RequestBody @Valid EmployeeRequest request) {
-        commandGateway.send(mapper.toCreateEmployeeCommand(request));
-        return new ResponseEntity<>(new ResponseDto<>("creating new employee with id: %s done successfully"), HttpStatus.CREATED);
+        String id= commandGateway.sendAndWait(mapper.toCreateEmployeeCommand(request));
+        return new ResponseEntity<>(new ResponseDto<>(String.format("creating new employee with id: %s done successfully",id)), HttpStatus.CREATED);
     }
 }
