@@ -43,7 +43,7 @@ public class UpdateEmployeeController extends BaseController {
                     {@Content(mediaType = "application/json", schema =
                     @Schema(implementation = Problem.class))})})
     public ResponseEntity<?> createEmployee(@RequestBody @Valid EmployeeRequest request, @PathVariable String id) {
-        commandGateway.send(mapper.toUpdateEmployeeCommand(request, id));
+        commandGateway.sendAndWait(mapper.toUpdateEmployeeCommand(request, id));
         return ResponseEntity.ok(new ResponseDto<>("updating the employee done successfully"));
     }
 }
