@@ -24,7 +24,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Aggregate
+@Aggregate(snapshotTriggerDefinition = "employeeSnapshotTriggerDefinition")
 @NoArgsConstructor
 @Slf4j
 public class EmployeeAggregate {

@@ -1,4 +1,4 @@
-package employee.service.management.command.dto;
+package employee.service.management.command.model.dto;
 
 import java.util.List;
 

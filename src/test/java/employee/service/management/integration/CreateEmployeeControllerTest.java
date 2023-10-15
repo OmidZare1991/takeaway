@@ -1,6 +1,6 @@
 package employee.service.management.integration;
 
-import employee.service.management.command.dto.EmployeeRequest;
+import employee.service.management.command.model.dto.EmployeeRequest;
 import employee.service.management.core.domain.Employee;
 import employee.service.management.core.domain.dto.ResponseDto;
 import employee.service.management.query.repository.EmployeeRepository;

@@ -1,6 +1,6 @@
 package employee.service.management.command.controller;
 
-import employee.service.management.command.dto.EmployeeRequest;
+import employee.service.management.command.model.dto.EmployeeRequest;
 import employee.service.management.command.mappper.CreateEmployeeControllerMapper;
 import employee.service.management.core.base_controller.BaseController;
 import employee.service.management.core.domain.dto.ResponseDto;
@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.zalando.problem.Problem;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,17 +32,14 @@ public class CreateEmployeeController extends BaseController {
             @ApiResponse(responseCode = "201", description = "Created", content =
                     {@Content(mediaType = "application/json", schema =
                     @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "422", description = "id cannot be null or empty"),
             @ApiResponse(responseCode = "400", description = "must be a well-formed email address"),
             @ApiResponse(responseCode = "400", description = "full name cannot be null or empty"),
             @ApiResponse(responseCode = "400", description = "birthdate cannot be null or empty"),
-            @ApiResponse(responseCode = "403", description = "User not found"),
-            @ApiResponse(responseCode = "417", description = "check your input and try again"),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content =
-                    {@Content(mediaType = "application/json", schema =
-                    @Schema(implementation = Problem.class))})})
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "forbidden"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
     public ResponseEntity<?> createEmployee(@RequestBody @Valid EmployeeRequest request) {
-        commandGateway.send(mapper.toCreateEmployeeCommand(request));
-        return new ResponseEntity<>(new ResponseDto<>("creating new employee with id: %s done successfully"), HttpStatus.CREATED);
+        String id = commandGateway.sendAndWait(mapper.toCreateEmployeeCommand(request));
+        return new ResponseEntity<>(new ResponseDto<>(String.format("creating new employee with id: %s done successfully",id)), HttpStatus.CREATED);
     }
 }

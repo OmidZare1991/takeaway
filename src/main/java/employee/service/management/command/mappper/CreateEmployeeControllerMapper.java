@@ -1,7 +1,7 @@
 package employee.service.management.command.mappper;
 
 import employee.service.management.command.commands.CreateEmployeeCommand;
-import employee.service.management.command.dto.EmployeeRequest;
+import employee.service.management.command.model.dto.EmployeeRequest;
 import employee.service.management.core.base_mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

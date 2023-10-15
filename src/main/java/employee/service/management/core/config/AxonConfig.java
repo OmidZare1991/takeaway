@@ -34,9 +34,9 @@ public class AxonConfig {
                 .build();
     }
 
-    @Autowired
-    public void configure(EventProcessingConfigurer configurer) {
-        configurer.usingSubscribingEventProcessors();
-    }
+//    @Autowired
+//    public void configure(EventProcessingConfigurer configurer) {
+//        configurer.usingSubscribingEventProcessors();
+//    }
 
 }

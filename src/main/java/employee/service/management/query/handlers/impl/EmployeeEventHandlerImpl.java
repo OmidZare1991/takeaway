@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.ResetHandler;
+import org.axonframework.messaging.interceptors.ExceptionHandler;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,9 +35,11 @@ public class EmployeeEventHandlerImpl implements EmployeeEventHandler {
 
     @Override
     @EventHandler
-    public void on(EmployeeUpdatedEvent event) {
+    public void on(EmployeeUpdatedEvent event) throws IllegalArgumentException{
+
         Employee employee = employeeService.findById(event.uuid()).orElseThrow(() -> new ResourceNotFoundException("employee not found"));
         employeeService.save(mapper.toEmployee(event, employee));
+
     }
 
     @Override
@@ -48,5 +52,15 @@ public class EmployeeEventHandlerImpl implements EmployeeEventHandler {
     @EventHandler
     public void on(EmployeeTerminateEvent event) {
         employeeService.deleteById(event.uuid());
+    }
+
+    @ExceptionHandler
+    public void handle(Exception e) throws Exception {
+        throw e;
+    }
+
+    @ResetHandler
+    public void reset(){
+        employeeService.deleteAll();
     }
 }

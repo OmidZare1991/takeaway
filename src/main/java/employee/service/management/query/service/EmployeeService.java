@@ -15,4 +15,5 @@ public interface EmployeeService {
     QueryEmployeesResponseDto findAll(PageRequest page);
     void deleteById(String id);
 
+    void deleteAll();
 }
