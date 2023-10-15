@@ -23,10 +23,11 @@ public class CreateEmployeeCommandInterceptor implements MessageDispatchIntercep
             if (CreateEmployeeCommand.class.equals(command.getPayloadType())) {
                 CreateEmployeeCommand createEmployeeCommand = (CreateEmployeeCommand) command.getPayload();
                 // do validation and throw exceptions
-
-                if (repository.findByEmail(createEmployeeCommand.email()) != null) {
-                    throw new IllegalStateException(String.format("employee with email %s already exist", createEmployeeCommand.email()));
-                }
+//                synchronized (CreateEmployeeCommandInterceptor.class) {
+                    if (repository.findByEmail(createEmployeeCommand.email()) != null) {
+                        throw new IllegalStateException(String.format("employee with email %s already exist", createEmployeeCommand.email()));
+                    }
+//                }
             }
             return command;
         };

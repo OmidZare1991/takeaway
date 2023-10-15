@@ -16,4 +16,6 @@ public class EmployeeLookUpEntity {
     private Long id;
     @Column(unique = true)
     private String email;
+    @Version
+    private Long version;
 }
