@@ -307,7 +307,7 @@
 				<version>${jib-maven-plugin.serviceVersion}</version>
 				<executions>
 					<execution>
-						<phase>package</phase>
+						<phase>verify</phase>
 						<goals>
 							<goal>buildTar</goal>
 							<goal>dockerBuild</goal>

@@ -32,27 +32,24 @@ public class EmployeeQueryController extends BaseController {
             @ApiResponse(responseCode = "200", description = "OK", content =
                     {@Content(mediaType = "application/json", schema =
                     @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "403", description = "User not found"),
-            @ApiResponse(responseCode = "417", description = "check your input and try again"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "forbidden"),
             @ApiResponse(responseCode = "400", description = "page size cannot be greater than 100"),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content =
-                    {@Content(mediaType = "application/json", schema =
-                    @Schema(implementation = Problem.class))})})
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
     public ResponseEntity<?> getEmployees(@Valid PaginationSetting setting) {
         FindEmployeesQuery findEmployeesQuery = mapper.toFindEmployeeDto(setting);
         return ResponseEntity.ok(new ResponseDto<>(queryGateway.query(findEmployeesQuery, QueryEmployeesResponseDto.class).join()));
     }
 
     @GetMapping("employees/{id}")
-    @Operation(summary = "Employee Retrieval", description = "Retrieve all employees with page size")
+    @Operation(summary = "Employee Retrieval", description = "Retrieve a specific employee with id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content =
                     {@Content(mediaType = "application/json", schema =
                     @Schema(implementation = ResponseDto.class))}),
-            @ApiResponse(responseCode = "417", description = "check your input and try again"),
-            @ApiResponse(responseCode = "500", description = "Internal server error", content =
-                    {@Content(mediaType = "application/json", schema =
-                    @Schema(implementation = Problem.class))})})
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "forbidden"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")})
     public ResponseEntity<?> getEmployeeById(@PathVariable String id) {
         FindEmployeeQuery findEmployeeQuery = mapper.toFindEmployeeDto(id);
         return ResponseEntity.ok(new ResponseDto<>(queryGateway.query(findEmployeeQuery, EmployeeResponseDto.class).join()));

@@ -28,22 +28,14 @@ public class RedisCache {
     private final ConfigProperties config;
 
 
-//    @Bean
-//    public RedisCacheConfiguration cacheConfiguration(ConfigProperties config) {
-//        return RedisCacheConfiguration.defaultCacheConfig()
-//                .entryTtl(Duration.ofMinutes(config.getRedisTimeToLiveMinutes()))
-//                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-//    }
-
-
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
 
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("localhost");
-        redisStandaloneConfiguration.setPort(6379);
+        redisStandaloneConfiguration.setHostName(config.getRedisHost());
+        redisStandaloneConfiguration.setPort(config.getRedisPort());
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
-        jedisClientConfiguration.connectTimeout(Duration.ofSeconds(60));// 60s connection timeout
+        jedisClientConfiguration.connectTimeout(Duration.ofSeconds(config.getRedisConnectionTimeOutMillis()));
 
         return new JedisConnectionFactory(redisStandaloneConfiguration,
                 jedisClientConfiguration.build());
@@ -57,17 +49,15 @@ public class RedisCache {
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
-        return RedisCacheConfiguration.defaultCacheConfig() // default cache ttl
-                .entryTtl(Duration.ofMinutes(config.getRedisTimeToLiveMinutes())) // Changing the cache TTL
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(config.getRedisTimeToLiveMinutes()))
                 .disableCachingNullValues()
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-        //Defining serialization to retrieve data
     }
 
     @Bean
     public CacheManager cacheManager() {
         Map<String, RedisCacheConfiguration> cacheNamesConfigurationMap = new HashMap<>();
-//        cacheNamesConfigurationMap.put("otpConfig", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(configFile.getOtpConfigCacheTimeToLive())));
         return new RedisCacheManager(redisCacheWriter(), cacheConfiguration(), cacheNamesConfigurationMap);
     }
 

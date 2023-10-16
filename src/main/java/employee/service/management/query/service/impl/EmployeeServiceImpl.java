@@ -33,7 +33,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Cacheable(cacheNames = "employees", key = "#page.pageNumber")
     public QueryEmployeesResponseDto findAll(PageRequest page) {
         Page<Employee> employees = employeeRepository.findAll(page);
 
